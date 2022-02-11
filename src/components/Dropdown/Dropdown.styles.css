@@ -1,0 +1,30 @@
+.dropdown {
+    margin-top: 0.6rem;
+    background-color: white;
+    width: 13rem;
+    padding: 0.6rem;
+    border-radius: 0.4rem;
+    max-height: 13rem;
+    overflow: auto;
+}
+
+.dropdown-item {
+    margin-bottom: 0.6rem;
+    padding: 0.4rem ;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0.2rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
