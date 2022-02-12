@@ -4,12 +4,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+To run locally on your pc:
+1. clone the project
+2. in /src/App.tsx replace the fetch url link ('/api/astros.json') in the useEffect with 'http://api.open-notify.org/astros.json'. Note that this is only for running locally, to run on a hosted platform leave as is i.e '/api/astros.json'
+3. in the root of your project run the command below:
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
