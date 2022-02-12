@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import ActiveInput from './components/ActiveInput';
 import Button from './components/Button';
-import Dropdown from './components/Dropdown';
 import SelectedOption from './components/SelectedOption';
+import { MultiSelectContainer } from './context/MultiSelectContainer';
+import { filterOptionBySearchTerm } from './utils/options.utils';
 
 const App = (): JSX.Element => {
   const [isInputActive, setIsInputActive] = useState<boolean>(false);
-  const [searchText, setSearchtext] = useState<string>('')
+  const [searchText, setSearchtext] = useState<string>('');
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [dropdownOpt, setDropdownOpt] = useState<string[]>([]);
+  const [maxLengthOfItems, setMaxLengthOfItems] = useState<number>(0);
 
-  const dropdownOpt = [
-    'opt1', 
-    'opt2', 
-    'opt3', 
-    'opt4', 
-    'opt5', 
-    'opt6', 
-    'opt7'
-  ];
-
-  const handleAddTag = () => {
+  const handleAddTagClick = () => {
     setIsInputActive(true)
   };
 
@@ -32,67 +26,96 @@ const App = (): JSX.Element => {
     })
     setIsInputActive(false);
     setSearchtext('')
-  }
+  };
 
   const handleSearchTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchtext(event.target.value)
-  }
-
-  const handleDisplayAddTag = () => {
-    if(dropdownOpt.length !== selectedOptions.length) {
-      return isInputActive ? (
-        <input
-         type="text"
-         className='input'
-         onChange={handleSearchTextChange}
-         autoFocus                                                                                                         
-        />
-      ) : (
-        <Button btnText='+ Add tag' handleClick={handleAddTag} />
-      )
-    }
-  }
+  };
 
   const handleRemoveSelectedOption = (option: string) => {
     const selectedOptCopy = selectedOptions;
     const filteredOpt = selectedOptCopy.filter((value) => value !== option);
-    console.log('filteredOpt ==> ', filteredOpt)
 
     setSelectedOptions(() => {
       return filteredOpt
     })
+  };
 
-  }
+  const handleCreateOption = (opt: string) => {
+    setSelectedOptions((prevState) => {
+      return [
+        ...prevState,
+        opt
+      ]
+    });
+    setIsInputActive(false);
+    setSearchtext('');
+    setMaxLengthOfItems(maxLengthOfItems + 1)
+  };
 
-  const filteredOptions = dropdownOpt.filter((value) => value.includes(searchText) && !selectedOptions.includes(value))
+  const handleDisplayAddTag = () => {
+    if(maxLengthOfItems !== selectedOptions.length) {
+      return isInputActive ? (
+        <ActiveInput />
+      ) : (
+        <Button btnText='+ Add tag' handleClick={handleAddTagClick} />
+      )
+    }
+  };
 
-  console.log('isInputActive -->', isInputActive)
-  console.log('selectedOptions -->', selectedOptions)
-  console.log('filteredOptions ---->', filteredOptions)
+  const filteredOptions = filterOptionBySearchTerm(dropdownOpt, searchText, selectedOptions);
+
+  useEffect(() => {
+    const fetchDropdownOption = async () => {
+      try {
+        const rawdata = await fetch('http://api.open-notify.org/astros.json');
+        const jsonData = await rawdata.json();
+        const options = jsonData.people.map(({name}: {name: string}) => name);
+
+        setDropdownOpt(options);
+        setMaxLengthOfItems(options.length)
+      } catch (error) {
+        console.error('error ==>', error)
+      }
+    };
+
+    fetchDropdownOption();
+  }, [])
 
   return (
-    <div 
-      className="App" 
+    <MultiSelectContainer.Provider 
+      value={{
+        state: {
+          searchText,
+          filteredOptions
+        },
+        functions: {
+          handleSelectOption,
+          handleSearchTextChange,
+          handleRemoveSelectedOption,
+          handleCreateOption
+        }
+      }}
     >
-      <div className='main'>
-        <h2 className='title'>Multiselect Dropdown</h2>
+      <div 
+        className="App" 
+      >
+        <div className='main'>
+          <h2 className='title'>Multiselect Dropdown</h2>
 
-        <div className='custom-dropdown'>
-          <div className='custom-input'>
-            {selectedOptions.map((value, idx) => (
-              <SelectedOption key={idx} option={value} handleRemove={handleRemoveSelectedOption} />
-            ))}
+          <div className='custom-dropdown'>
+            <div className='custom-input'>
+              {selectedOptions.map((value, idx) => (
+                <SelectedOption key={idx} option={value} />
+              ))}
 
-            {handleDisplayAddTag()}
-            
+              {handleDisplayAddTag()}
+              
+            </div>
           </div>
-
-          {isInputActive && <Dropdown handleOnSelect={handleSelectOption} dropdownOptions={filteredOptions} />}
-          
         </div>
-        
       </div>
-    </div>
+    </MultiSelectContainer.Provider>
   );
 }
 

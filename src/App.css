@@ -11,28 +11,20 @@
 }
 
 .custom-dropdown {
-  
+  display: flex;
 }
 
 .custom-input {
   width: 28rem;
+  min-height: 2rem;
   padding: 0.6rem;
   margin: auto;
   border: none;
   border-radius: 0.4rem;
   background-color: white;
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  cursor: text;
+  position: relative;
 }
 
-
-
-.input {
-  border: none;
-  padding: 0.4rem 0;
-}
-
-.input:focus {
-  outline: none;
-}
