@@ -28,3 +28,12 @@
   position: relative;
 }
 
+
+@media only screen and (max-width: 800px) {
+  .title {
+    font-size: 1.3rem;
+  }
+  .custom-input {
+    width: 20rem;
+  }
+}
