@@ -1,5 +1,5 @@
 import React from 'react';
-// import { MultiSelectContainer } from '../../context/MultiSelectContainer';
+// import { MultiSelectContext } from '../../context/MultiSelectContext';
 import './Dropdown.styles.css';
 
 interface DropdownProps {

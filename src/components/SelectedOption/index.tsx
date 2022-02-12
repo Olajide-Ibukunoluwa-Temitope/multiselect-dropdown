@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { MultiSelectContainer } from '../../context/MultiSelectContainer';
+import { MultiSelectContext } from '../../context/MultiSelectContext';
 import Button from '../Button';
 import './SelectedOption.styles.css'
 
@@ -8,7 +8,7 @@ interface SelectedOptionProps {
 }
 
 const SelectedOption = ({option}: SelectedOptionProps) => {
-  const {functions} = useContext(MultiSelectContainer)
+  const {functions} = useContext(MultiSelectContext)
   return (
     <div className='selected-option'>
         <span className='selected-option-title'>{option}</span>

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import {MultiSelectContainer} from '../../context/MultiSelectContainer'
+import {MultiSelectContext} from '../../context/MultiSelectContext'
 import Dropdown from '../Dropdown';
 import './ActiveInput.styles.css';
 
 const ActiveInput = () => {
-    const {state, functions} = useContext(MultiSelectContainer);
+    const {state, functions} = useContext(MultiSelectContext);
 
     return (
         <div className='activeInput'>
@@ -12,6 +12,7 @@ const ActiveInput = () => {
                 <input
                     type="text"
                     className='input'
+                    name='text-input'
                     onChange={functions?.handleSearchTextChange}
                     value={state?.searchText}
                     autoFocus                                                                                                         

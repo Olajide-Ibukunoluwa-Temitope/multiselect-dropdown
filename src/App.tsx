@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import ActiveInput from './components/ActiveInput';
 import Button from './components/Button';
 import SelectedOption from './components/SelectedOption';
-import { MultiSelectContainer } from './context/MultiSelectContainer';
+import { MultiSelectContext } from './context/MultiSelectContext';
 import { filterOptionBySearchTerm } from './utils/options.utils';
 
 const App = (): JSX.Element => {
@@ -32,7 +32,7 @@ const App = (): JSX.Element => {
     setSearchtext(event.target.value)
   };
 
-  const handleRemoveSelectedOption = (option: string) => {
+  const handleRemoveSelectedOption = useCallback((option: string) => {
     const selectedOptCopy = selectedOptions;
     const filteredOpt = selectedOptCopy.filter((value) => value !== option);
     const indexOfOptionInDropdownMenu = dropdownOpt.indexOf(option);
@@ -48,9 +48,9 @@ const App = (): JSX.Element => {
       setMaxLengthOfItems(maxLengthOfItems - 1);
     }
     
-  };
+  }, [dropdownOpt, maxLengthOfItems, selectedOptions]);
 
-  const handleCreateOption = (opt: string) => {
+  const handleCreateOption = useCallback((opt: string) => {
     setSelectedOptions((prevState) => {
       return [
         ...prevState,
@@ -60,7 +60,7 @@ const App = (): JSX.Element => {
     setIsInputActive(false);
     setSearchtext('');
     setMaxLengthOfItems(maxLengthOfItems + 1)
-  };
+  }, [maxLengthOfItems]);
 
   const handleDisplayAddTag = () => {
     if(selectedOptions.length !== maxLengthOfItems) {
@@ -73,6 +73,12 @@ const App = (): JSX.Element => {
   };
 
   const filteredOptions = filterOptionBySearchTerm(dropdownOpt, searchText, selectedOptions);
+  const contextFunctions = useMemo(() => ({
+    handleSelectOption,
+    handleSearchTextChange,
+    handleRemoveSelectedOption,
+    handleCreateOption
+  }), [handleCreateOption, handleRemoveSelectedOption])
 
   useEffect(() => {
     const getDropdownOption = async () => {
@@ -92,7 +98,7 @@ const App = (): JSX.Element => {
   }, [])
 
   return (
-    <MultiSelectContainer.Provider 
+    <MultiSelectContext.Provider 
       value={{
         state: {
           isInputActive,
@@ -101,13 +107,7 @@ const App = (): JSX.Element => {
           dropdownOpt,
           filteredOptions
         },
-        functions: {
-          handleAddTag,
-          handleSelectOption,
-          handleSearchTextChange,
-          handleRemoveSelectedOption,
-          handleCreateOption
-        }
+        functions: contextFunctions
       }}
     >
       <div 
@@ -128,7 +128,7 @@ const App = (): JSX.Element => {
           </div>
         </div>
       </div>
-    </MultiSelectContainer.Provider>
+    </MultiSelectContext.Provider>
   );
 }
 
