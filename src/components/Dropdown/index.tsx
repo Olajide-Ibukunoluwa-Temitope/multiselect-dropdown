@@ -1,4 +1,5 @@
 import React from 'react';
+// import { MultiSelectContainer } from '../../context/MultiSelectContainer';
 import './Dropdown.styles.css';
 
 interface DropdownProps {
@@ -8,8 +9,7 @@ interface DropdownProps {
     createOption: (opt:string) => void;
 }
 
-const Dropdown = ({handleOnSelect, dropdownOptions, userSearchTerm, createOption}: DropdownProps): JSX.Element => {
-                
+const Dropdown = ({handleOnSelect, dropdownOptions, userSearchTerm, createOption}: DropdownProps): JSX.Element => {   
     return (
         <div className='dropdown'>
             <ul>

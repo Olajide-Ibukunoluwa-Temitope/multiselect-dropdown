@@ -13,7 +13,7 @@ const App = (): JSX.Element => {
   const [dropdownOpt, setDropdownOpt] = useState<string[]>([]);
   const [maxLengthOfItems, setMaxLengthOfItems] = useState<number>(0);
 
-  const handleAddTagClick = () => {
+  const handleAddTag = () => {
     setIsInputActive(true)
   };
 
@@ -25,7 +25,7 @@ const App = (): JSX.Element => {
       ]
     })
     setIsInputActive(false);
-    setSearchtext('')
+    setSearchtext('');
   };
 
   const handleSearchTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +35,19 @@ const App = (): JSX.Element => {
   const handleRemoveSelectedOption = (option: string) => {
     const selectedOptCopy = selectedOptions;
     const filteredOpt = selectedOptCopy.filter((value) => value !== option);
+    const indexOfOptionInDropdownMenu = dropdownOpt.indexOf(option);
 
-    setSelectedOptions(() => {
-      return filteredOpt
-    })
+    if (indexOfOptionInDropdownMenu !== -1){
+      setSelectedOptions(() => {
+        return filteredOpt
+      })
+    } else {
+      setSelectedOptions(() => {
+        return filteredOpt
+      })
+      setMaxLengthOfItems(maxLengthOfItems - 1);
+    }
+    
   };
 
   const handleCreateOption = (opt: string) => {
@@ -54,11 +63,11 @@ const App = (): JSX.Element => {
   };
 
   const handleDisplayAddTag = () => {
-    if(maxLengthOfItems !== selectedOptions.length) {
+    if(selectedOptions.length !== maxLengthOfItems) {
       return isInputActive ? (
         <ActiveInput />
       ) : (
-        <Button btnText='+ Add tag' handleClick={handleAddTagClick} />
+        <Button btnText='+ Add tag' handleClick={handleAddTag} />
       )
     }
   };
@@ -66,7 +75,7 @@ const App = (): JSX.Element => {
   const filteredOptions = filterOptionBySearchTerm(dropdownOpt, searchText, selectedOptions);
 
   useEffect(() => {
-    const fetchDropdownOption = async () => {
+    const getDropdownOption = async () => {
       try {
         const rawdata = await fetch('http://api.open-notify.org/astros.json');
         const jsonData = await rawdata.json();
@@ -79,17 +88,21 @@ const App = (): JSX.Element => {
       }
     };
 
-    fetchDropdownOption();
+    getDropdownOption();
   }, [])
 
   return (
     <MultiSelectContainer.Provider 
       value={{
         state: {
+          isInputActive,
           searchText,
+          selectedOptions,
+          dropdownOpt,
           filteredOptions
         },
         functions: {
+          handleAddTag,
           handleSelectOption,
           handleSearchTextChange,
           handleRemoveSelectedOption,
