@@ -1,0 +1,40 @@
+.dropdown {
+    margin-top: 0.6rem;
+    background-color: white;
+    width: 13rem;
+    padding: 0.6rem;
+    border-radius: 0.4rem;
+    max-height: 13rem;
+    overflow: auto;
+    position: absolute;
+    top: 100%;
+}
+
+.dropdown-item {
+    margin-bottom: 0.4rem;
+    padding: 0.4rem ;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.2rem;
+}
+
+.dropdown-item span {
+    color: lightgray;
+}
+
+.dropdown-item:last-child{
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}

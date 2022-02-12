@@ -1,0 +1,12 @@
+.selected-option{
+    background-color: rgb(246, 247, 249);
+    padding: 0.2rem 0.5rem 0.4rem 0.9rem;
+    margin: 0.2rem;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+}
+
+.selected-option-title{
+    margin-right: 0.5rem;
+}
