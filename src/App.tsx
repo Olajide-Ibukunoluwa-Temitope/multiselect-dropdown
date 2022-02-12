@@ -83,7 +83,7 @@ const App = (): JSX.Element => {
   useEffect(() => {
     const getDropdownOption = async () => {
       try {
-        const rawdata = await fetch('http://api.open-notify.org/astros.json');
+        const rawdata = await fetch('/api/astros.json');
         const jsonData = await rawdata.json();
         const options = jsonData.people.map(({name}: {name: string}) => name);
 
